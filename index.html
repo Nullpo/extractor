@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="Main.js"></script>
+</head>
+<body>
+<div id="elm-node"></div>
+<script src="elm.js"></script>
+<script>
+    const storedState = localStorage.getItem('state');
+    console.log("Retrieved state: ", storedState);
+    const startingState = storedState ? JSON.parse(storedState) : null;
+
+    const app = Elm.Main.init({
+        node: document.getElementById("elm-node"),
+        flags: startingState
+    });
+
+    app.ports.storeState.subscribe(function(state) {
+        if (state.length > 0) {
+            var stateJson = JSON.stringify(state);
+            localStorage.setItem('state', stateJson);
+            console.log("Saved state: ", stateJson);
+        }
+    });
+</script>
+</body>
+</html>
