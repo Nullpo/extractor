@@ -7458,27 +7458,6 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$row = F2(
 			$rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes(options),
 			A2($elm$core$List$map, $rundis$elm_bootstrap$Bootstrap$Grid$renderCol, cols));
 	});
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
-var $elm$virtual_dom$VirtualDom$node = function (tag) {
-	return _VirtualDom_node(
-		_VirtualDom_noScript(tag));
-};
-var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
-var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
-var $rundis$elm_bootstrap$Bootstrap$CDN$stylesheet = A3(
-	$elm$html$Html$node,
-	'link',
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$rel('stylesheet'),
-			$elm$html$Html$Attributes$href('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
-		]),
-	_List_Nil);
 var $author$project$View$view = function (model) {
 	var _new = model.view;
 	var onCreate = $author$project$Msg$ExtractionListMsg(
@@ -7489,7 +7468,6 @@ var $author$project$View$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				$rundis$elm_bootstrap$Bootstrap$CDN$stylesheet,
 				A2(
 				$rundis$elm_bootstrap$Bootstrap$Grid$row,
 				_List_Nil,

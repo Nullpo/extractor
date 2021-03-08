@@ -17,7 +17,6 @@ view model =
     onCreate = ExtractionListMsg (addToModel new)
   in
     Grid.container [] [
-        CDN.stylesheet,
         Grid.row [] [
             Grid.col [] (extractionListComponent extractions)
         ],
@@ -25,10 +24,3 @@ view model =
             Grid.col [] (newExtractionComponent onCreate)
         ]
     ]
-
-
-  --  div []
-  --      (
-  --          (extractionListComponent extractions) ++
-  --          (newExtractionComponent onCreate)
-  --      )
