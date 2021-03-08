@@ -15,18 +15,20 @@ bbutton text_ style onclick =
 
 printExtractionList extraction =
     let
-        posixTime = toTime extraction.date
-        time = case posixTime of
+        posixTime = toTime (extraction.date ++ ":00")
+
+        dateTime = case posixTime of
             Ok value ->
-                format "dd-MM HH:mm" Time.utc value
+                {date = format "dd-MM" Time.utc value, time = format "HH:mm" Time.utc value}
             Err error ->
                 let
-                    dummy = (Debug.log << Debug.toString) error
+                    dummy = ( (Debug.log "time") << Debug.toString) posixTime
                 in
-                    "Error"
+                    {date ="Error: ", time = (Debug.toString error)}
     in
     [
-        Table.td [] [text time],
+        Table.td [] [text dateTime.date],
+        Table.td [] [text dateTime.time],
         Table.td [] [badgeSuccess [] [ text extraction.amount ]],
         Table.td [] [bbutton "Eliminar" Button.primary ((ExtractionListMsg << removeFromModel) extraction)]
     ]
@@ -35,7 +37,7 @@ extractionListComponent: ModelType -> List (Html Msg)
 extractionListComponent model =
     [
         Table.simpleTable (
-            Table.simpleThead [Table.th [] [text "Fecha"], Table.th [] [text "ml"], Table.th [] []],
+            Table.simpleThead [Table.th [] [text "Fecha"], Table.th [] [text "Hora"], Table.th [] [text "ml"], Table.th [] []],
             Table.tbody [] (List.map (Table.tr [] << printExtractionList) model)
         )
     ]

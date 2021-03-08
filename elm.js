@@ -7792,15 +7792,24 @@ var $elm$time$Time$Zone = F2(
 	});
 var $elm$time$Time$utc = A2($elm$time$Time$Zone, 0, _List_Nil);
 var $author$project$ExtractionListComponent$printExtractionList = function (extraction) {
-	var posixTime = $rtfeldman$elm_iso8601_date_strings$Iso8601$toTime(extraction.date);
-	var time = function () {
+	var posixTime = $rtfeldman$elm_iso8601_date_strings$Iso8601$toTime(extraction.date + ':00');
+	var dateTime = function () {
 		if (posixTime.$ === 'Ok') {
 			var value = posixTime.a;
-			return A3($danhandrea$elm_date_format$DateFormat$format, 'dd-MM HH:mm', $elm$time$Time$utc, value);
+			return {
+				date: A3($danhandrea$elm_date_format$DateFormat$format, 'dd-MM', $elm$time$Time$utc, value),
+				time: A3($danhandrea$elm_date_format$DateFormat$format, 'HH:mm', $elm$time$Time$utc, value)
+			};
 		} else {
 			var error = posixTime.a;
-			var dummy = A2($elm$core$Basics$composeL, $elm$core$Debug$log, $elm$core$Debug$toString)(error);
-			return 'Error';
+			var dummy = A2(
+				$elm$core$Basics$composeL,
+				$elm$core$Debug$log('time'),
+				$elm$core$Debug$toString)(posixTime);
+			return {
+				date: 'Error: ',
+				time: $elm$core$Debug$toString(error)
+			};
 		}
 	}();
 	return _List_fromArray(
@@ -7810,7 +7819,14 @@ var $author$project$ExtractionListComponent$printExtractionList = function (extr
 			_List_Nil,
 			_List_fromArray(
 				[
-					$elm$html$Html$text(time)
+					$elm$html$Html$text(dateTime.date)
+				])),
+			A2(
+			$rundis$elm_bootstrap$Bootstrap$Table$td,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text(dateTime.time)
 				])),
 			A2(
 			$rundis$elm_bootstrap$Bootstrap$Table$td,
@@ -8458,6 +8474,13 @@ var $author$project$ExtractionListComponent$extractionListComponent = function (
 							_List_fromArray(
 								[
 									$elm$html$Html$text('Fecha')
+								])),
+							A2(
+							$rundis$elm_bootstrap$Bootstrap$Table$th,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Hora')
 								])),
 							A2(
 							$rundis$elm_bootstrap$Bootstrap$Table$th,
