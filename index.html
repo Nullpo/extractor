@@ -13,6 +13,12 @@
 <script src="elm.js"></script>
 <script>
     const storedState = localStorage.getItem('state');
+    const backup = localStorage.getItem('backup');
+
+    if(!backup) {
+        localStorage.setItem('backup', storedState);
+    }
+
     console.log("Retrieved state: ", storedState);
     const startingState = storedState ? JSON.parse(storedState) : null;
 

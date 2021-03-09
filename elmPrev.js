@@ -4358,52 +4358,6 @@ function _Browser_load(url)
 
 
 
-function _Time_now(millisToPosix)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
-}
-
-var _Time_setInterval = F2(function(interval, task)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(
-			A2($elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
-}
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = $elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = $elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
-
-
-
 var _Bitwise_and = F2(function(a, b)
 {
 	return a & b;
@@ -5393,10 +5347,6 @@ var $author$project$Ports$loadState = function (postsJson) {
 		return _List_Nil;
 	}
 };
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Init$init = function (flags) {
@@ -5409,432 +5359,13 @@ var $author$project$Init$init = function (flags) {
 		}
 	}();
 	return _Utils_Tuple2(
-		{
-			extractions: extractions,
-			time: $elm$time$Time$millisToPosix(0),
-			view: $author$project$NewExtractionComponent$defaultNewExtraction
-		},
+		{extractions: extractions, view: $author$project$NewExtractionComponent$defaultNewExtraction},
 		$elm$core$Platform$Cmd$none);
 };
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $elm$json$Json$Decode$null = _Json_decodeNull;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
-var $author$project$Msg$OnTime = function (a) {
-	return {$: 'OnTime', a: a};
-};
-var $elm$time$Time$Every = F2(
-	function (a, b) {
-		return {$: 'Every', a: a, b: b};
-	});
-var $elm$time$Time$State = F2(
-	function (taggers, processes) {
-		return {processes: processes, taggers: taggers};
-	});
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
-var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
-var $elm$time$Time$init = $elm$core$Task$succeed(
-	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
-var $elm$core$Basics$compare = _Utils_compare;
-var $elm$core$Dict$get = F2(
-	function (targetKey, dict) {
-		get:
-		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
-				switch (_v1.$) {
-					case 'LT':
-						var $temp$targetKey = targetKey,
-							$temp$dict = left;
-						targetKey = $temp$targetKey;
-						dict = $temp$dict;
-						continue get;
-					case 'EQ':
-						return $elm$core$Maybe$Just(value);
-					default:
-						var $temp$targetKey = targetKey,
-							$temp$dict = right;
-						targetKey = $temp$targetKey;
-						dict = $temp$dict;
-						continue get;
-				}
-			}
-		}
-	});
-var $elm$core$Dict$Black = {$: 'Black'};
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
-	});
-var $elm$core$Dict$Red = {$: 'Red'};
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1.$) {
-				case 'LT':
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 'EQ':
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
-		}
-	});
-var $elm$time$Time$addMySub = F2(
-	function (_v0, state) {
-		var interval = _v0.a;
-		var tagger = _v0.b;
-		var _v1 = A2($elm$core$Dict$get, interval, state);
-		if (_v1.$ === 'Nothing') {
-			return A3(
-				$elm$core$Dict$insert,
-				interval,
-				_List_fromArray(
-					[tagger]),
-				state);
-		} else {
-			var taggers = _v1.a;
-			return A3(
-				$elm$core$Dict$insert,
-				interval,
-				A2($elm$core$List$cons, tagger, taggers),
-				state);
-		}
-	});
-var $elm$core$Process$kill = _Scheduler_kill;
-var $elm$core$Dict$foldl = F3(
-	function (func, acc, dict) {
-		foldl:
-		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
-				return acc;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var $temp$func = func,
-					$temp$acc = A3(
-					func,
-					key,
-					value,
-					A3($elm$core$Dict$foldl, func, acc, left)),
-					$temp$dict = right;
-				func = $temp$func;
-				acc = $temp$acc;
-				dict = $temp$dict;
-				continue foldl;
-			}
-		}
-	});
-var $elm$core$Dict$merge = F6(
-	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
-		var stepState = F3(
-			function (rKey, rValue, _v0) {
-				stepState:
-				while (true) {
-					var list = _v0.a;
-					var result = _v0.b;
-					if (!list.b) {
-						return _Utils_Tuple2(
-							list,
-							A3(rightStep, rKey, rValue, result));
-					} else {
-						var _v2 = list.a;
-						var lKey = _v2.a;
-						var lValue = _v2.b;
-						var rest = list.b;
-						if (_Utils_cmp(lKey, rKey) < 0) {
-							var $temp$rKey = rKey,
-								$temp$rValue = rValue,
-								$temp$_v0 = _Utils_Tuple2(
-								rest,
-								A3(leftStep, lKey, lValue, result));
-							rKey = $temp$rKey;
-							rValue = $temp$rValue;
-							_v0 = $temp$_v0;
-							continue stepState;
-						} else {
-							if (_Utils_cmp(lKey, rKey) > 0) {
-								return _Utils_Tuple2(
-									list,
-									A3(rightStep, rKey, rValue, result));
-							} else {
-								return _Utils_Tuple2(
-									rest,
-									A4(bothStep, lKey, lValue, rValue, result));
-							}
-						}
-					}
-				}
-			});
-		var _v3 = A3(
-			$elm$core$Dict$foldl,
-			stepState,
-			_Utils_Tuple2(
-				$elm$core$Dict$toList(leftDict),
-				initialResult),
-			rightDict);
-		var leftovers = _v3.a;
-		var intermediateResult = _v3.b;
-		return A3(
-			$elm$core$List$foldl,
-			F2(
-				function (_v4, result) {
-					var k = _v4.a;
-					var v = _v4.b;
-					return A3(leftStep, k, v, result);
-				}),
-			intermediateResult,
-			leftovers);
-	});
-var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
-var $elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
-};
-var $elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
-};
-var $elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
-	});
-var $elm$time$Time$customZone = $elm$time$Time$Zone;
-var $elm$time$Time$setInterval = _Time_setInterval;
-var $elm$core$Process$spawn = _Scheduler_spawn;
-var $elm$time$Time$spawnHelp = F3(
-	function (router, intervals, processes) {
-		if (!intervals.b) {
-			return $elm$core$Task$succeed(processes);
-		} else {
-			var interval = intervals.a;
-			var rest = intervals.b;
-			var spawnTimer = $elm$core$Process$spawn(
-				A2(
-					$elm$time$Time$setInterval,
-					interval,
-					A2($elm$core$Platform$sendToSelf, router, interval)));
-			var spawnRest = function (id) {
-				return A3(
-					$elm$time$Time$spawnHelp,
-					router,
-					rest,
-					A3($elm$core$Dict$insert, interval, id, processes));
-			};
-			return A2($elm$core$Task$andThen, spawnRest, spawnTimer);
-		}
-	});
-var $elm$time$Time$onEffects = F3(
-	function (router, subs, _v0) {
-		var processes = _v0.processes;
-		var rightStep = F3(
-			function (_v6, id, _v7) {
-				var spawns = _v7.a;
-				var existing = _v7.b;
-				var kills = _v7.c;
-				return _Utils_Tuple3(
-					spawns,
-					existing,
-					A2(
-						$elm$core$Task$andThen,
-						function (_v5) {
-							return kills;
-						},
-						$elm$core$Process$kill(id)));
-			});
-		var newTaggers = A3($elm$core$List$foldl, $elm$time$Time$addMySub, $elm$core$Dict$empty, subs);
-		var leftStep = F3(
-			function (interval, taggers, _v4) {
-				var spawns = _v4.a;
-				var existing = _v4.b;
-				var kills = _v4.c;
-				return _Utils_Tuple3(
-					A2($elm$core$List$cons, interval, spawns),
-					existing,
-					kills);
-			});
-		var bothStep = F4(
-			function (interval, taggers, id, _v3) {
-				var spawns = _v3.a;
-				var existing = _v3.b;
-				var kills = _v3.c;
-				return _Utils_Tuple3(
-					spawns,
-					A3($elm$core$Dict$insert, interval, id, existing),
-					kills);
-			});
-		var _v1 = A6(
-			$elm$core$Dict$merge,
-			leftStep,
-			bothStep,
-			rightStep,
-			newTaggers,
-			processes,
-			_Utils_Tuple3(
-				_List_Nil,
-				$elm$core$Dict$empty,
-				$elm$core$Task$succeed(_Utils_Tuple0)));
-		var spawnList = _v1.a;
-		var existingDict = _v1.b;
-		var killTask = _v1.c;
-		return A2(
-			$elm$core$Task$andThen,
-			function (newProcesses) {
-				return $elm$core$Task$succeed(
-					A2($elm$time$Time$State, newTaggers, newProcesses));
-			},
-			A2(
-				$elm$core$Task$andThen,
-				function (_v2) {
-					return A3($elm$time$Time$spawnHelp, router, spawnList, existingDict);
-				},
-				killTask));
-	});
-var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
-var $elm$time$Time$onSelfMsg = F3(
-	function (router, interval, state) {
-		var _v0 = A2($elm$core$Dict$get, interval, state.taggers);
-		if (_v0.$ === 'Nothing') {
-			return $elm$core$Task$succeed(state);
-		} else {
-			var taggers = _v0.a;
-			var tellTaggers = function (time) {
-				return $elm$core$Task$sequence(
-					A2(
-						$elm$core$List$map,
-						function (tagger) {
-							return A2(
-								$elm$core$Platform$sendToApp,
-								router,
-								tagger(time));
-						},
-						taggers));
-			};
-			return A2(
-				$elm$core$Task$andThen,
-				function (_v1) {
-					return $elm$core$Task$succeed(state);
-				},
-				A2($elm$core$Task$andThen, tellTaggers, $elm$time$Time$now));
-		}
-	});
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var $elm$time$Time$subMap = F2(
-	function (f, _v0) {
-		var interval = _v0.a;
-		var tagger = _v0.b;
-		return A2(
-			$elm$time$Time$Every,
-			interval,
-			A2($elm$core$Basics$composeL, f, tagger));
-	});
-_Platform_effectManagers['Time'] = _Platform_createManager($elm$time$Time$init, $elm$time$Time$onEffects, $elm$time$Time$onSelfMsg, 0, $elm$time$Time$subMap);
-var $elm$time$Time$subscription = _Platform_leaf('Time');
-var $elm$time$Time$every = F2(
-	function (interval, tagger) {
-		return $elm$time$Time$subscription(
-			A2($elm$time$Time$Every, interval, tagger));
-	});
-var $author$project$Main$subscriptions = function (model) {
-	return A2($elm$time$Time$every, 1000, $author$project$Msg$OnTime);
-};
 var $elm$json$Json$Encode$list = F2(
 	function (func, entries) {
 		return _Json_wrap(
@@ -5940,7 +5471,7 @@ var $author$project$Update$changeAndSave = F2(
 	function (msg, model) {
 		var extractions = A2($author$project$ExtractionListModel$updateExtractionList, msg, model.extractions);
 		return _Utils_Tuple2(
-			{extractions: extractions, time: model.time, view: model.view},
+			{extractions: extractions, view: model.view},
 			$author$project$Ports$saveState(extractions));
 	});
 var $author$project$NewExtractionComponent$updateNewExtraction = F2(
@@ -5955,24 +5486,17 @@ var $author$project$NewExtractionComponent$updateNewExtraction = F2(
 	});
 var $author$project$Update$update = F2(
 	function (msg, model) {
-		switch (msg.$) {
-			case 'ExtractionListMsg':
-				var modelMsg = msg.a;
-				return A2($author$project$Update$changeAndSave, modelMsg, model);
-			case 'ExtractionNewMsg':
-				var viewMsg = msg.a;
-				return _Utils_Tuple2(
-					{
-						extractions: model.extractions,
-						time: model.time,
-						view: A2($author$project$NewExtractionComponent$updateNewExtraction, viewMsg, model.view)
-					},
-					$elm$core$Platform$Cmd$none);
-			default:
-				var posix = msg.a;
-				return _Utils_Tuple2(
-					{extractions: model.extractions, time: posix, view: model.view},
-					$elm$core$Platform$Cmd$none);
+		if (msg.$ === 'ExtractionListMsg') {
+			var modelMsg = msg.a;
+			return A2($author$project$Update$changeAndSave, modelMsg, model);
+		} else {
+			var viewMsg = msg.a;
+			return _Utils_Tuple2(
+				{
+					extractions: model.extractions,
+					view: A2($author$project$NewExtractionComponent$updateNewExtraction, viewMsg, model.view)
+				},
+				$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Msg$ExtractionListMsg = function (a) {
@@ -6010,6 +5534,11 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$container = F2(
 					]),
 				attributes),
 			children);
+	});
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
 	});
 var $rundis$elm_bootstrap$Bootstrap$Badge$Roled = function (a) {
 	return {$: 'Roled', a: a};
@@ -7692,6 +7221,10 @@ var $rtfeldman$elm_iso8601_date_strings$Iso8601$fractionsOfASecondInMs = A2(
 	},
 	$elm$parser$Parser$getChompedString(
 		$elm$parser$Parser$chompWhile($elm$core$Char$isDigit)));
+var $elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
 var $rtfeldman$elm_iso8601_date_strings$Iso8601$fromParts = F6(
 	function (monthYearDayMs, hour, minute, second, ms, utcOffsetMinutes) {
 		return $elm$time$Time$millisToPosix((((monthYearDayMs + (((hour * 60) * 60) * 1000)) + (((minute - utcOffsetMinutes) * 60) * 1000)) + (second * 1000)) + ms);
@@ -8253,9 +7786,17 @@ var $elm$parser$Parser$run = F2(
 var $rtfeldman$elm_iso8601_date_strings$Iso8601$toTime = function (str) {
 	return A2($elm$parser$Parser$run, $rtfeldman$elm_iso8601_date_strings$Iso8601$iso8601, str);
 };
+var $elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
 var $elm$time$Time$utc = A2($elm$time$Time$Zone, 0, _List_Nil);
 var $author$project$ExtractionListComponent$printExtractionList = function (extraction) {
 	var posixTime = $rtfeldman$elm_iso8601_date_strings$Iso8601$toTime(extraction.date + ':00');
+	var dummy2 = A2(
+		$elm$core$Basics$composeL,
+		$elm$core$Debug$log('timeOk'),
+		$elm$core$Debug$toString)(posixTime);
 	var dateTime = function () {
 		if (posixTime.$ === 'Ok') {
 			var value = posixTime.a;
@@ -10088,200 +9629,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$row = F2(
 			$rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes(options),
 			A2($elm$core$List$map, $rundis$elm_bootstrap$Bootstrap$Grid$renderCol, cols));
 	});
-var $author$project$ExtractionSum$amount = function (x) {
-	return x.amount;
-};
-var $waratuman$time_extra$Time$Extra$addDays = function (d) {
-	return A2(
-		$elm$core$Basics$composeR,
-		$elm$time$Time$posixToMillis,
-		A2(
-			$elm$core$Basics$composeR,
-			$elm$core$Basics$add(d * 86400000),
-			$elm$time$Time$millisToPosix));
-};
-var $waratuman$time_extra$Time$Extra$addHours = function (m) {
-	return A2(
-		$elm$core$Basics$composeR,
-		$elm$time$Time$posixToMillis,
-		A2(
-			$elm$core$Basics$composeR,
-			$elm$core$Basics$add(m * 3600000),
-			$elm$time$Time$millisToPosix));
-};
-var $author$project$DateTimeUtils$addEleven = $waratuman$time_extra$Time$Extra$addHours(11);
-var $waratuman$time_extra$Time$Extra$setHour = F3(
-	function (z, h, t) {
-		var t_ = $elm$time$Time$posixToMillis(t);
-		var h_ = A2($elm$core$Basics$modBy, 24, h);
-		var diff = (h_ - A2($elm$time$Time$toHour, z, t)) * 3600000;
-		return $elm$time$Time$millisToPosix(t_ + diff);
-	});
-var $waratuman$time_extra$Time$Extra$setMillis = F3(
-	function (z, m, t) {
-		var t_ = $elm$time$Time$posixToMillis(t);
-		var m_ = m % 1000;
-		var diff = m_ - A2($elm$time$Time$toMillis, z, t);
-		return $elm$time$Time$millisToPosix(t_ + diff);
-	});
-var $waratuman$time_extra$Time$Extra$setMinute = F3(
-	function (z, m, t) {
-		var t_ = $elm$time$Time$posixToMillis(t);
-		var m_ = A2($elm$core$Basics$modBy, 60, m);
-		var diff = (m_ - A2($elm$time$Time$toMinute, z, t)) * 60000;
-		return $elm$time$Time$millisToPosix(t_ + diff);
-	});
-var $waratuman$time_extra$Time$Extra$setSecond = F3(
-	function (z, s, t) {
-		var t_ = $elm$time$Time$posixToMillis(t);
-		var s_ = A2($elm$core$Basics$modBy, 60, s);
-		var diff = (s_ - A2($elm$time$Time$toSecond, z, t)) * 1000;
-		return $elm$time$Time$millisToPosix(t_ + diff);
-	});
-var $waratuman$time_extra$Time$Extra$endOfDay = F2(
-	function (z, d) {
-		return A3(
-			$waratuman$time_extra$Time$Extra$setMillis,
-			z,
-			999,
-			A3(
-				$waratuman$time_extra$Time$Extra$setSecond,
-				z,
-				59,
-				A3(
-					$waratuman$time_extra$Time$Extra$setMinute,
-					z,
-					59,
-					A3($waratuman$time_extra$Time$Extra$setHour, z, 23, d))));
-	});
-var $waratuman$time_extra$Time$Extra$startOfDay = F2(
-	function (z, d) {
-		return A3(
-			$waratuman$time_extra$Time$Extra$setMillis,
-			z,
-			0,
-			A3(
-				$waratuman$time_extra$Time$Extra$setSecond,
-				z,
-				0,
-				A3(
-					$waratuman$time_extra$Time$Extra$setMinute,
-					z,
-					0,
-					A3($waratuman$time_extra$Time$Extra$setHour, z, 0, d))));
-	});
-var $author$project$DateTimeUtils$getRangeStartingToday = function (now) {
-	return _Utils_Tuple2(
-		A2(
-			$elm$core$Basics$composeL,
-			$author$project$DateTimeUtils$addEleven,
-			$waratuman$time_extra$Time$Extra$startOfDay($elm$time$Time$utc))(now),
-		A2(
-			$elm$core$Basics$composeL,
-			$author$project$DateTimeUtils$addEleven,
-			$waratuman$time_extra$Time$Extra$endOfDay($elm$time$Time$utc))(now));
-};
-var $author$project$DateTimeUtils$getRangeEndingToday = function (now) {
-	return $author$project$DateTimeUtils$getRangeStartingToday(
-		A2($waratuman$time_extra$Time$Extra$addDays, -1, now));
-};
-var $waratuman$time_extra$Time$Extra$compare = F2(
-	function (a, b) {
-		return A2(
-			$elm$core$Basics$compare,
-			$elm$time$Time$posixToMillis(a),
-			$elm$time$Time$posixToMillis(b));
-	});
-var $author$project$DateTimeUtils$isAfterStart = function (posix) {
-	var limit = $author$project$DateTimeUtils$addEleven(
-		A2($waratuman$time_extra$Time$Extra$startOfDay, $elm$time$Time$utc, posix));
-	var _v0 = A2($waratuman$time_extra$Time$Extra$compare, limit, posix);
-	switch (_v0.$) {
-		case 'LT':
-			return true;
-		case 'EQ':
-			return false;
-		default:
-			return false;
-	}
-};
-var $author$project$DateTimeUtils$getDayRange = function (now) {
-	var _v0 = $author$project$DateTimeUtils$isAfterStart(now);
-	if (_v0) {
-		return $author$project$DateTimeUtils$getRangeStartingToday(now);
-	} else {
-		return $author$project$DateTimeUtils$getRangeEndingToday(now);
-	}
-};
-var $author$project$DateTimeUtils$isAfter = F2(
-	function (start, now) {
-		var _v0 = A2($waratuman$time_extra$Time$Extra$compare, start, now);
-		switch (_v0.$) {
-			case 'LT':
-				return true;
-			case 'EQ':
-				return false;
-			default:
-				return false;
-		}
-	});
-var $author$project$DateTimeUtils$isBefore = F2(
-	function (end, now) {
-		var _v0 = A2($waratuman$time_extra$Time$Extra$compare, end, now);
-		switch (_v0.$) {
-			case 'LT':
-				return false;
-			case 'EQ':
-				return true;
-			default:
-				return true;
-		}
-	});
-var $author$project$DateTimeUtils$isInRange = F2(
-	function (_v0, extractionDate) {
-		var start = _v0.a;
-		var end = _v0.b;
-		return A2($author$project$DateTimeUtils$isAfter, start, extractionDate) && A2($author$project$DateTimeUtils$isBefore, end, extractionDate);
-	});
-var $author$project$DateTimeUtils$isExtractionFromThisDay = F2(
-	function (now, extraction) {
-		var _v0 = $rtfeldman$elm_iso8601_date_strings$Iso8601$toTime(extraction.date + ':00');
-		if (_v0.$ === 'Ok') {
-			var posixExtractionTime = _v0.a;
-			return A2(
-				$author$project$DateTimeUtils$isInRange,
-				$author$project$DateTimeUtils$getDayRange(now),
-				posixExtractionTime);
-		} else {
-			var error = _v0.a;
-			var dummy = A2(
-				$elm$core$Basics$composeL,
-				$elm$core$Debug$log('Error '),
-				$elm$core$Debug$toString)(
-				{error: error, value: extraction.date});
-			return false;
-		}
-	});
-var $author$project$ExtractionSum$sumLastDay = F2(
-	function (now, extractions) {
-		var okExtractions = A2(
-			$elm$core$List$filter,
-			$author$project$DateTimeUtils$isExtractionFromThisDay(now),
-			extractions);
-		var numericExtractions = A2(
-			$elm$core$List$filterMap,
-			A2($elm$core$Basics$composeL, $elm$core$String$toInt, $author$project$ExtractionSum$amount),
-			okExtractions);
-		return _List_fromArray(
-			[
-				$elm$html$Html$text('Sumatoria extracciones: '),
-				$elm$html$Html$text(
-				$elm$core$String$fromInt(
-					A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numericExtractions)) + ' ml')
-			]);
-	});
 var $author$project$View$view = function (model) {
-	var time = model.time;
 	var _new = model.view;
 	var onCreate = $author$project$Msg$ExtractionListMsg(
 		$author$project$ExtractionListModel$addToModel(_new));
@@ -10291,16 +9639,6 @@ var $author$project$View$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				A2(
-				$rundis$elm_bootstrap$Bootstrap$Grid$row,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$rundis$elm_bootstrap$Bootstrap$Grid$col,
-						_List_Nil,
-						A2($author$project$ExtractionSum$sumLastDay, time, extractions))
-					])),
 				A2(
 				$rundis$elm_bootstrap$Bootstrap$Grid$row,
 				_List_Nil,
@@ -10324,7 +9662,14 @@ var $author$project$View$view = function (model) {
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{init: $author$project$Init$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Update$update, view: $author$project$View$view});
+	{
+		init: $author$project$Init$init,
+		subscriptions: function (_v0) {
+			return $elm$core$Platform$Sub$none;
+		},
+		update: $author$project$Update$update,
+		view: $author$project$View$view
+	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$oneOf(
 		_List_fromArray(

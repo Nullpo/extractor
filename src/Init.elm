@@ -4,6 +4,7 @@ import AppModel exposing (FullModel)
 import Msg exposing (Msg)
 import NewExtractionComponent exposing (defaultNewExtraction)
 import Ports exposing (loadState)
+import Time
 
 init: Maybe String -> (FullModel, Cmd Msg)
 init flags =
@@ -13,4 +14,4 @@ init flags =
                 Just config -> loadState config
                 Nothing -> []
     in
-        ({ extractions = extractions, view = defaultNewExtraction }, Cmd.none)
+        ({ extractions = extractions, view = defaultNewExtraction, time = (Time.millisToPosix 0) }, Cmd.none)

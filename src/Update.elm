@@ -1,6 +1,5 @@
 module Update exposing (update)
 
-
 import AppModel exposing (FullModel)
 import ExtractionListModel exposing (updateExtractionList)
 import Msg exposing (Msg(..))
@@ -11,7 +10,7 @@ changeAndSave msg model =
     let
         extractions = updateExtractionList msg model.extractions
     in
-        ({extractions = extractions, view = model.view}, saveState extractions)
+        ({extractions = extractions, view = model.view, time = model.time}, saveState extractions)
 
 update: Msg -> FullModel -> (FullModel, Cmd Msg)
 update msg model =
@@ -19,4 +18,6 @@ update msg model =
         ExtractionListMsg modelMsg ->
             changeAndSave modelMsg model
         ExtractionNewMsg viewMsg ->
-            ({extractions = model.extractions, view = (updateNewExtraction viewMsg model.view)}, Cmd.none)
+            ({extractions = model.extractions, view = (updateNewExtraction viewMsg model.view), time = model.time}, Cmd.none)
+        OnTime posix ->
+            ({extractions = model.extractions, view = model.view, time = posix}, Cmd.none)
