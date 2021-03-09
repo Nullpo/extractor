@@ -9,9 +9,19 @@ import Time
 init: Maybe String -> (FullModel, Cmd Msg)
 init flags =
     let
-        extractions =
+        state =
             case flags of
                 Just config -> loadState config
-                Nothing -> []
+                Nothing -> {
+                               extractions = [],
+                               expectedAmountPerDay = 0,
+                               error = Nothing
+                           }
     in
-        ({ extractions = extractions, view = defaultNewExtraction, time = (Time.millisToPosix 0) }, Cmd.none)
+        ({
+            extractions = state.extractions,
+            view = defaultNewExtraction,
+            expectedAmountPerDay = state.expectedAmountPerDay,
+            error = state.error,
+            time = (Time.millisToPosix 0)
+            }, Cmd.none)

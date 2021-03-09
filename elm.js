@@ -10713,6 +10713,10 @@ var $elm$core$Basics$never = function (_v0) {
 };
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$NewExtractionComponent$defaultNewExtraction = {amount: '', date: ''};
+var $author$project$Extraction$SavedStateType = F2(
+	function (extractions, expectedAmountPerDay) {
+		return {expectedAmountPerDay: expectedAmountPerDay, extractions: extractions};
+	});
 var $author$project$Extraction$Extraction = F2(
 	function (date, amount) {
 		return {amount: amount, date: date};
@@ -10734,14 +10738,25 @@ var $author$project$Extraction$extractionDecoder = A3(
 		'date',
 		$elm$json$Json$Decode$string,
 		$elm$json$Json$Decode$succeed($author$project$Extraction$Extraction)));
-var $author$project$Extraction$stateDecoder = $elm$json$Json$Decode$list($author$project$Extraction$extractionDecoder);
-var $author$project$Ports$loadState = function (postsJson) {
-	var _v0 = A2($elm$json$Json$Decode$decodeString, $author$project$Extraction$stateDecoder, postsJson);
+var $author$project$Extraction$extractionsDecoder = $elm$json$Json$Decode$list($author$project$Extraction$extractionDecoder);
+var $author$project$Ports$stateDecoder = A3(
+	$elm$json$Json$Decode$map2,
+	$author$project$Extraction$SavedStateType,
+	A2($elm$json$Json$Decode$field, 'extractions', $author$project$Extraction$extractionsDecoder),
+	A2($elm$json$Json$Decode$field, 'expectedAmountPerDay', $elm$json$Json$Decode$int));
+var $elm$core$Debug$toString = _Debug_toString;
+var $author$project$Ports$loadState = function (receivedJson) {
+	var _v0 = A2($elm$json$Json$Decode$decodeString, $author$project$Ports$stateDecoder, receivedJson);
 	if (_v0.$ === 'Ok') {
 		var posts = _v0.a;
-		return posts;
+		return {error: $elm$core$Maybe$Nothing, expectedAmountPerDay: posts.expectedAmountPerDay, extractions: posts.extractions};
 	} else {
-		return _List_Nil;
+		var err = _v0.a;
+		return {
+			error: A2($elm$core$Basics$composeL, $elm$core$Maybe$Just, $elm$core$Debug$toString)(err),
+			expectedAmountPerDay: 0,
+			extractions: _List_Nil
+		};
 	}
 };
 var $elm$time$Time$Posix = function (a) {
@@ -10749,17 +10764,19 @@ var $elm$time$Time$Posix = function (a) {
 };
 var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
 var $author$project$Init$init = function (flags) {
-	var extractions = function () {
+	var state = function () {
 		if (flags.$ === 'Just') {
 			var config = flags.a;
 			return $author$project$Ports$loadState(config);
 		} else {
-			return _List_Nil;
+			return {error: $elm$core$Maybe$Nothing, expectedAmountPerDay: 0, extractions: _List_Nil};
 		}
 	}();
 	return _Utils_Tuple2(
 		{
-			extractions: extractions,
+			error: state.error,
+			expectedAmountPerDay: state.expectedAmountPerDay,
+			extractions: state.extractions,
 			time: $elm$time$Time$millisToPosix(0),
 			view: $author$project$NewExtractionComponent$defaultNewExtraction
 		},
@@ -10951,17 +10968,32 @@ var $elm$time$Time$every = F2(
 var $author$project$Main$subscriptions = function (model) {
 	return A2($elm$time$Time$every, 1000, $author$project$Msg$OnTime);
 };
-var $author$project$Extraction$stateEncoder = function (post) {
+var $author$project$Extraction$extractionEncoder = function (extraction) {
 	return $elm$json$Json$Encode$object(
 		_List_fromArray(
 			[
 				_Utils_Tuple2(
 				'date',
-				$elm$json$Json$Encode$string(post.date)),
+				$elm$json$Json$Encode$string(extraction.date)),
 				_Utils_Tuple2(
 				'amount',
-				$elm$json$Json$Encode$string(post.amount))
+				$elm$json$Json$Encode$string(extraction.amount))
 			]));
+};
+var $author$project$Extraction$extractionsEncoder = function (extractions) {
+	return A2($elm$json$Json$Encode$list, $author$project$Extraction$extractionEncoder, extractions);
+};
+var $elm$json$Json$Encode$int = _Json_wrap;
+var $author$project$Ports$stateEncoder = function (model) {
+	return _List_fromArray(
+		[
+			_Utils_Tuple2(
+			'extractions',
+			$author$project$Extraction$extractionsEncoder(model.extractions)),
+			_Utils_Tuple2(
+			'expectedAmountPerDay',
+			$elm$json$Json$Encode$int(model.expectedAmountPerDay))
+		]);
 };
 var $author$project$Ports$storeState = _Platform_outgoingPort('storeState', $elm$json$Json$Encode$string);
 var $author$project$Ports$saveState = function (posts) {
@@ -10969,7 +11001,8 @@ var $author$project$Ports$saveState = function (posts) {
 		A2(
 			$elm$json$Json$Encode$encode,
 			0,
-			A2($elm$json$Json$Encode$list, $author$project$Extraction$stateEncoder, posts)));
+			$elm$json$Json$Encode$object(
+				$author$project$Ports$stateEncoder(posts))));
 };
 var $author$project$ExtractionListModel$addExtraction = F2(
 	function (extractions, extraction) {
@@ -10978,7 +11011,6 @@ var $author$project$ExtractionListModel$addExtraction = F2(
 			_List_fromArray(
 				[extraction]));
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$ExtractionListModel$excludeSameExtraction = F2(
 	function (x, y) {
 		return !(_Utils_eq(x.date, y.date) && _Utils_eq(x.amount, y.amount));
@@ -11003,14 +11035,8 @@ var $author$project$ExtractionListModel$removeExtraction = F2(
 	function (extractions, extraction) {
 		return A2($author$project$ExtractionListModel$excludeFrom, extractions, extraction);
 	});
-var $elm$core$Debug$toString = _Debug_toString;
 var $author$project$ExtractionListModel$updateExtractionList = F2(
 	function (msg, model) {
-		var dummy = A2(
-			$elm$core$Basics$composeR,
-			$elm$core$Debug$toString,
-			$elm$core$Debug$log('Hola'))(msg);
-		var dos = A2($elm$core$Debug$log, 'Hola', 'Chau');
 		switch (msg.$) {
 			case 'Add':
 				var extraction = msg.a;
@@ -11027,8 +11053,11 @@ var $author$project$Update$changeAndSave = F2(
 	function (msg, model) {
 		var extractions = A2($author$project$ExtractionListModel$updateExtractionList, msg, model.extractions);
 		return _Utils_Tuple2(
-			{extractions: extractions, time: model.time, view: model.view},
-			$author$project$Ports$saveState(extractions));
+			extractions,
+			$author$project$Ports$saveState(
+				_Utils_update(
+					model,
+					{extractions: extractions})));
 	});
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0.a;
@@ -11059,24 +11088,32 @@ var $author$project$Update$update = F2(
 		switch (msg.$) {
 			case 'ExtractionListMsg':
 				var modelMsg = msg.a;
-				return A2($author$project$Update$changeAndSave, modelMsg, model);
+				var _v1 = A2($author$project$Update$changeAndSave, modelMsg, model);
+				var extractions = _v1.a;
+				var cmd = _v1.b;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{error: $elm$core$Maybe$Nothing, extractions: extractions}),
+					cmd);
 			case 'ExtractionNewMsg':
 				var viewMsg = msg.a;
 				return _Utils_Tuple2(
-					{
-						extractions: model.extractions,
-						time: model.time,
-						view: A2($author$project$NewExtractionComponent$updateNewExtraction, viewMsg, model.view)
-					},
+					_Utils_update(
+						model,
+						{
+							error: $elm$core$Maybe$Nothing,
+							view: A2($author$project$NewExtractionComponent$updateNewExtraction, viewMsg, model.view)
+						}),
 					$elm$core$Platform$Cmd$none);
 			default:
 				var posix = msg.a;
 				return _Utils_Tuple2(
-					{
-						extractions: model.extractions,
-						time: $author$project$DateTimeUtils$toLocalTimezone(posix),
-						view: model.view
-					},
+					_Utils_update(
+						model,
+						{
+							time: $author$project$DateTimeUtils$toLocalTimezone(posix)
+						}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -12552,6 +12589,7 @@ var $danhandrea$elm_date_format$DateFormat$format = F3(
 	function (fmt, zone, time) {
 		return A4($danhandrea$elm_date_format$DateFormat$formatI18n, $danhandrea$elm_date_format$DateFormat$English, fmt, zone, time);
 	});
+var $elm$core$Debug$log = _Debug_log;
 var $rundis$elm_bootstrap$Bootstrap$Internal$Button$Coloring = function (a) {
 	return {$: 'Coloring', a: a};
 };
@@ -15327,8 +15365,8 @@ var $author$project$ExtractionSum$time = function (now) {
 				$author$project$DateTimeUtils$toHumanDateTime(now))
 			]));
 };
-var $author$project$ExtractionSum$sumLastDay = F2(
-	function (now, extractions) {
+var $author$project$ExtractionSum$sumLastDay = F3(
+	function (now, extractions, expected) {
 		var okExtractions = A2(
 			$elm$core$List$filter,
 			$author$project$ExtractionUtils$isExtractionFromThisDay(now),
@@ -15340,6 +15378,14 @@ var $author$project$ExtractionSum$sumLastDay = F2(
 		return _List_fromArray(
 			[
 				$author$project$ExtractionSum$sum(numericExtractions),
+				A2(
+				$rundis$elm_bootstrap$Bootstrap$Grid$col,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$elm$core$String$fromInt(expected))
+					])),
 				$author$project$ExtractionSum$time(now)
 			]);
 	});
@@ -15349,6 +15395,7 @@ var $author$project$View$view = function (model) {
 	var onCreate = $author$project$Msg$ExtractionListMsg(
 		$author$project$ExtractionListModel$addToModel(_new));
 	var extractions = model.extractions;
+	var expected = model.expectedAmountPerDay;
 	return A2(
 		$rundis$elm_bootstrap$Bootstrap$Grid$container,
 		_List_Nil,
@@ -15357,7 +15404,7 @@ var $author$project$View$view = function (model) {
 				A2(
 				$rundis$elm_bootstrap$Bootstrap$Grid$row,
 				_List_Nil,
-				A2($author$project$ExtractionSum$sumLastDay, time, extractions)),
+				A3($author$project$ExtractionSum$sumLastDay, time, extractions, expected)),
 				A2(
 				$rundis$elm_bootstrap$Bootstrap$Grid$row,
 				_List_Nil,

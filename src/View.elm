@@ -26,10 +26,11 @@ view model =
     extractions = model.extractions
     new = model.view
     time = model.time
+    expected = model.expectedAmountPerDay
     onCreate = ExtractionListMsg (addToModel new)
   in
     Grid.container [] [
-        Grid.row [] (sumLastDay time extractions),
+        Grid.row [] (sumLastDay time extractions expected),
         Grid.row [] [
             Grid.col [] (extractionListComponent extractions)
         ],

@@ -1,18 +1,31 @@
-module Extraction exposing (..)
+module Extraction exposing (extractionsEncoder, extractionsDecoder, SavedStateType, ModelType, Extraction)
 
 import Json.Decode as Decode exposing (Decoder, list, string)
 import Json.Decode.Pipeline exposing (required)
-import Json.Encode as Encode
+import Json.Encode as Encode exposing (Value)
 
-type alias ModelType = List Extraction
+type alias SavedStateType = {
+        extractions: List Extraction,
+        expectedAmountPerDay: Int
+    }
 
-stateEncoder : Extraction -> Encode.Value
-stateEncoder post =
+type alias ModelType = {
+       extractions: List Extraction,
+       expectedAmountPerDay: Int,
+       error: Maybe String
+   }
+
+extractionEncoder : Extraction -> Encode.Value
+extractionEncoder extraction =
     Encode.object
         [
-            ( "date", Encode.string post.date ),
-            ( "amount", Encode.string post.amount )
+            ( "date", Encode.string extraction.date ),
+            ( "amount", Encode.string extraction.amount )
         ]
+
+extractionsEncoder: List Extraction -> Value
+extractionsEncoder extractions =
+    Encode.list extractionEncoder extractions
 
 extractionDecoder : Decoder Extraction
 extractionDecoder =
@@ -20,8 +33,8 @@ extractionDecoder =
         |> required "date" string
         |> required "amount" string
 
-stateDecoder : Decoder (List Extraction)
-stateDecoder =
+extractionsDecoder : Decoder (List Extraction)
+extractionsDecoder =
     list extractionDecoder
 
 type alias Extraction =

@@ -1,6 +1,6 @@
 module ExtractionListModel exposing (addExtraction, removeExtraction, addToModel, updateExtractionList, removeFromModel)
 
-import Extraction exposing (ModelType)
+import Extraction exposing (Extraction)
 import Msg exposing (ModelMsgType(..))
 
 excludeSameExtraction x y =
@@ -18,12 +18,8 @@ removeExtraction extractions extraction =
 addToModel = Add
 removeFromModel = Remove
 
-updateExtractionList: ModelMsgType -> ModelType -> ModelType
+updateExtractionList: ModelMsgType -> List Extraction -> List Extraction
 updateExtractionList msg model =
-    let
-        dummy = (Debug.toString >> (Debug.log "Hola")) msg
-        dos = Debug.log "Hola" "Chau"
-    in
         case msg of
         Add extraction -> addExtraction model extraction
         Remove extraction -> removeExtraction model extraction

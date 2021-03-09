@@ -20,7 +20,16 @@
     }
 
     console.log("Retrieved state: ", storedState);
-    const startingState = storedState ? JSON.parse(storedState) : null;
+    let startingState = storedState ? JSON.parse(storedState) : null;
+
+    if(JSON.parse(startingState).length && !localStorage.getItem('state2')) {
+        localStorage.setItem('state2', JSON.stringify(JSON.stringify({
+            extractions: JSON.parse(startingState),
+            expectedAmountPerDay: 200
+        })))
+    }
+
+    startingState = JSON.parse(localStorage.getItem('state2'));
 
     const app = Elm.Main.init({
         node: document.getElementById("elm-node"),
@@ -30,7 +39,7 @@
     app.ports.storeState.subscribe(function(state) {
         if (state.length > 0) {
             var stateJson = JSON.stringify(state);
-            localStorage.setItem('state', stateJson);
+            localStorage.setItem('state2', stateJson);
             console.log("Saved state: ", stateJson);
         }
     });

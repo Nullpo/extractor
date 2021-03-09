@@ -1,21 +1,46 @@
 port module Ports exposing (storeState, saveState, loadState)
 
-import Extraction exposing (ModelType, stateDecoder, stateEncoder)
-import Json.Decode exposing (decodeString)
-import Json.Encode as Encode
+import AppModel exposing (FullModel)
+import Extraction exposing (Extraction, ModelType, SavedStateType, extractionsDecoder, extractionsEncoder)
+import Json.Decode as Decode exposing (Decoder, decodeString, field)
+import Json.Encode as Encode exposing (Value)
 
 port storeState : String -> Cmd msg
 
-saveState : ModelType -> Cmd msg
+saveState : FullModel -> Cmd msg
 saveState posts =
-    Encode.list stateEncoder posts
+    -- Encode.list extractionEncoder posts
+    Encode.object (stateEncoder posts)
         |> Encode.encode 0
         |> storeState
 
+
+stateEncoder : FullModel -> List (String, Value)
+stateEncoder model =
+            [
+                ( "extractions", extractionsEncoder model.extractions ),
+                ( "expectedAmountPerDay", Encode.int model.expectedAmountPerDay )
+            ]
+
+
+stateDecoder : Decoder SavedStateType
+stateDecoder =
+    Decode.map2 SavedStateType
+        (field "extractions" extractionsDecoder)
+        (field "expectedAmountPerDay" Decode.int)
+
 loadState : String -> ModelType
-loadState postsJson =
-    case decodeString stateDecoder postsJson of
+loadState receivedJson =
+    case decodeString stateDecoder receivedJson of
         Ok posts ->
-            posts
-        Err _ ->
-            []
+            {
+                extractions = posts.extractions,
+                expectedAmountPerDay = posts.expectedAmountPerDay,
+                error = Nothing
+            }
+        Err err ->
+            {
+                extractions = [],
+                expectedAmountPerDay = 0,
+                error = (Just << Debug.toString) err
+            }

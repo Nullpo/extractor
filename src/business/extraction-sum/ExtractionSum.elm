@@ -26,13 +26,14 @@ time now =
 
 
 
-sumLastDay: Posix -> List Extraction -> List (Column Msg)
-sumLastDay now extractions =
+sumLastDay: Posix -> List Extraction -> Int -> List (Column Msg)
+sumLastDay now extractions expected =
     let
         okExtractions = (List.filter (isExtractionFromThisDay now) extractions)
         numericExtractions = List.filterMap (String.toInt << amount) okExtractions
     in
     [
         sum numericExtractions,
+        Grid.col [] [ Html.text (String.fromInt expected) ],
         time now
     ]

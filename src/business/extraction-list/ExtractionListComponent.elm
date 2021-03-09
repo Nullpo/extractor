@@ -5,7 +5,7 @@ import Bootstrap.Table as Table exposing (cellAttr)
 import Bootstrap.Text as Text
 import BootstrapUtils exposing (bbutton)
 import DateFormat exposing (format)
-import Extraction exposing (Extraction, ModelType)
+import Extraction exposing (Extraction)
 import Html exposing (Html, text)
 import ExtractionListModel exposing (removeFromModel)
 import Html.Attributes
@@ -35,7 +35,7 @@ printExtractionList extraction =
         Table.td [ toRight ] [bbutton "Eliminar" Button.primary ((ExtractionListMsg << removeFromModel) extraction)]
     ]
 
-extractionListComponent: ModelType -> List (Html Msg)
+extractionListComponent: List Extraction -> List (Html Msg)
 extractionListComponent model =
     let
         sortModel = (List.reverse << List.sortBy .date) model
@@ -51,6 +51,3 @@ extractionListComponent model =
             Table.tbody [] (List.map (Table.tr [] << printExtractionList) sortModel)
         )
     ]
-
-
-    -- List.map (Grid.row [] << printExtractionList)
