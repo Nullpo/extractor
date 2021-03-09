@@ -6261,7 +6261,7 @@ var $rundis$elm_bootstrap$Bootstrap$Button$onClick = function (message) {
 };
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$ExtractionListComponent$bbutton = F3(
+var $author$project$BootstrapUtils$bbutton = F3(
 	function (text_, style, onclick) {
 		return A2(
 			$rundis$elm_bootstrap$Bootstrap$Button$button,
@@ -8310,7 +8310,7 @@ var $author$project$ExtractionListComponent$printExtractionList = function (extr
 			_List_fromArray(
 				[
 					A3(
-					$author$project$ExtractionListComponent$bbutton,
+					$author$project$BootstrapUtils$bbutton,
 					'Eliminar',
 					$rundis$elm_bootstrap$Bootstrap$Button$primary,
 					A2($elm$core$Basics$composeL, $author$project$Msg$ExtractionListMsg, $author$project$ExtractionListModel$removeFromModel)(extraction))
@@ -8913,6 +8913,7 @@ var $rundis$elm_bootstrap$Bootstrap$Table$simpleThead = function (cells) {
 				A2($rundis$elm_bootstrap$Bootstrap$Table$tr, _List_Nil, cells)
 			]));
 };
+var $elm$core$List$sortBy = _List_sortBy;
 var $rundis$elm_bootstrap$Bootstrap$Table$tbody = F2(
 	function (attributes, rows) {
 		return $rundis$elm_bootstrap$Bootstrap$Table$TBody(
@@ -8924,6 +8925,13 @@ var $rundis$elm_bootstrap$Bootstrap$Table$th = F2(
 			{children: children, options: options});
 	});
 var $author$project$ExtractionListComponent$extractionListComponent = function (model) {
+	var sortModel = A2(
+		$elm$core$Basics$composeL,
+		$elm$core$List$reverse,
+		$elm$core$List$sortBy(
+			function ($) {
+				return $.date;
+			}))(model);
 	return _List_fromArray(
 		[
 			$rundis$elm_bootstrap$Bootstrap$Table$simpleTable(
@@ -8963,37 +8971,21 @@ var $author$project$ExtractionListComponent$extractionListComponent = function (
 							$elm$core$Basics$composeL,
 							$rundis$elm_bootstrap$Bootstrap$Table$tr(_List_Nil),
 							$author$project$ExtractionListComponent$printExtractionList),
-						model))))
+						sortModel))))
 		]);
 };
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
+var $author$project$NewExtractionComponent$addComponent = F2(
+	function (text, onAddExtraction) {
+		return A3($author$project$BootstrapUtils$bbutton, text, $rundis$elm_bootstrap$Bootstrap$Button$primary, onAddExtraction);
 	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
+var $rundis$elm_bootstrap$Bootstrap$Internal$Text$Left = {$: 'Left'};
+var $rundis$elm_bootstrap$Bootstrap$General$Internal$XS = {$: 'XS'};
+var $rundis$elm_bootstrap$Bootstrap$Text$alignXs = function (dir) {
+	return {dir: dir, size: $rundis$elm_bootstrap$Bootstrap$General$Internal$XS};
 };
-var $author$project$NewExtractionComponent$addComponent = function (onAddExtraction) {
-	return A2(
-		$elm$html$Html$button,
-		_List_fromArray(
-			[
-				$elm$html$Html$Events$onClick(onAddExtraction)
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('Agregar')
-			]));
-};
+var $rundis$elm_bootstrap$Bootstrap$Text$alignXsLeft = $rundis$elm_bootstrap$Bootstrap$Text$alignXs($rundis$elm_bootstrap$Bootstrap$Internal$Text$Left);
+var $rundis$elm_bootstrap$Bootstrap$Internal$Text$Right = {$: 'Right'};
+var $rundis$elm_bootstrap$Bootstrap$Text$alignXsRight = $rundis$elm_bootstrap$Bootstrap$Text$alignXs($rundis$elm_bootstrap$Bootstrap$Internal$Text$Right);
 var $author$project$Msg$ExtractionNewMsg = function (a) {
 	return {$: 'ExtractionNewMsg', a: a};
 };
@@ -9280,34 +9272,11 @@ var $rundis$elm_bootstrap$Bootstrap$Form$group = F2(
 			$rundis$elm_bootstrap$Bootstrap$Form$toAttributes(options),
 			children);
 	});
-var $author$project$NewExtractionComponent$newExtractionComponent = function (onAddExtraction) {
-	return _List_fromArray(
-		[
-			A2(
-			$rundis$elm_bootstrap$Bootstrap$Form$group,
-			_List_Nil,
-			_List_fromArray(
-				[$author$project$NewExtractionComponent$dateComponent])),
-			A2(
-			$rundis$elm_bootstrap$Bootstrap$Form$group,
-			_List_Nil,
-			_List_fromArray(
-				[$author$project$NewExtractionComponent$amountComponent])),
-			A2(
-			$rundis$elm_bootstrap$Bootstrap$Form$group,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$author$project$NewExtractionComponent$addComponent(onAddExtraction)
-				]))
-		]);
-};
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$Col = {$: 'Col'};
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$Width = F2(
 	function (screenSize, columnCount) {
 		return {columnCount: columnCount, screenSize: screenSize};
 	});
-var $rundis$elm_bootstrap$Bootstrap$General$Internal$XS = {$: 'XS'};
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColAlign = F2(
 	function (align_, options) {
 		var _v0 = align_.screenSize;
@@ -10088,6 +10057,152 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$row = F2(
 			$rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes(options),
 			A2($elm$core$List$map, $rundis$elm_bootstrap$Bootstrap$Grid$renderCol, cols));
 	});
+var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$TextAlign = function (a) {
+	return {$: 'TextAlign', a: a};
+};
+var $rundis$elm_bootstrap$Bootstrap$Grid$Col$textAlign = function (align) {
+	return $rundis$elm_bootstrap$Bootstrap$Grid$Internal$TextAlign(align);
+};
+var $author$project$NewExtractionComponent$newExtractionComponent = F2(
+	function (onAddExtraction, onAddDelayedExtraction) {
+		return _List_fromArray(
+			[
+				A2(
+				$rundis$elm_bootstrap$Bootstrap$Form$group,
+				_List_Nil,
+				_List_fromArray(
+					[$author$project$NewExtractionComponent$dateComponent])),
+				A2(
+				$rundis$elm_bootstrap$Bootstrap$Form$group,
+				_List_Nil,
+				_List_fromArray(
+					[$author$project$NewExtractionComponent$amountComponent])),
+				A2(
+				$rundis$elm_bootstrap$Bootstrap$Grid$row,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$rundis$elm_bootstrap$Bootstrap$Grid$col,
+						_List_fromArray(
+							[
+								$rundis$elm_bootstrap$Bootstrap$Grid$Col$textAlign($rundis$elm_bootstrap$Bootstrap$Text$alignXsLeft)
+							]),
+						_List_fromArray(
+							[
+								A2($author$project$NewExtractionComponent$addComponent, 'Agregar', onAddExtraction)
+							])),
+						A2(
+						$rundis$elm_bootstrap$Bootstrap$Grid$col,
+						_List_fromArray(
+							[
+								$rundis$elm_bootstrap$Bootstrap$Grid$Col$textAlign($rundis$elm_bootstrap$Bootstrap$Text$alignXsRight)
+							]),
+						_List_fromArray(
+							[
+								A2($author$project$NewExtractionComponent$addComponent, '20 mins antes', onAddDelayedExtraction)
+							]))
+					]))
+			]);
+	});
+var $waratuman$time_extra$Time$Extra$addMinutes = function (m) {
+	return A2(
+		$elm$core$Basics$composeR,
+		$elm$time$Time$posixToMillis,
+		A2(
+			$elm$core$Basics$composeR,
+			$elm$core$Basics$add(m * 60000),
+			$elm$time$Time$millisToPosix));
+};
+var $waratuman$time_extra$Time$Extra$monthToInt = function (m) {
+	switch (m.$) {
+		case 'Jan':
+			return 1;
+		case 'Feb':
+			return 2;
+		case 'Mar':
+			return 3;
+		case 'Apr':
+			return 4;
+		case 'May':
+			return 5;
+		case 'Jun':
+			return 6;
+		case 'Jul':
+			return 7;
+		case 'Aug':
+			return 8;
+		case 'Sep':
+			return 9;
+		case 'Oct':
+			return 10;
+		case 'Nov':
+			return 11;
+		default:
+			return 12;
+	}
+};
+var $waratuman$time_extra$Time$Extra$toIso8601Date = F2(
+	function (z, dt) {
+		return A3(
+			$elm$core$String$padLeft,
+			4,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(
+				A2($elm$time$Time$toYear, z, dt))) + ('-' + (A3(
+			$elm$core$String$padLeft,
+			2,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(
+				$waratuman$time_extra$Time$Extra$monthToInt(
+					A2($elm$time$Time$toMonth, z, dt)))) + ('-' + A3(
+			$elm$core$String$padLeft,
+			2,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(
+				A2($elm$time$Time$toDay, z, dt))))));
+	});
+var $waratuman$time_extra$Time$Extra$toIso8601Time = F2(
+	function (z, dt) {
+		var s = A2($elm$time$Time$toSecond, z, dt);
+		var ms = A2($elm$time$Time$toMillis, z, dt);
+		var m = A2($elm$time$Time$toMinute, z, dt);
+		var h = A2($elm$time$Time$toHour, z, dt);
+		return A3(
+			$elm$core$String$padLeft,
+			2,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(h)) + (':' + (A3(
+			$elm$core$String$padLeft,
+			2,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(m)) + (((!s) && (!ms)) ? '' : (':' + (A3(
+			$elm$core$String$padLeft,
+			2,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(s)) + ((!ms) ? '' : ('.' + A3(
+			$elm$core$String$padLeft,
+			3,
+			_Utils_chr('0'),
+			$elm$core$String$fromInt(ms)))))))));
+	});
+var $waratuman$time_extra$Time$Extra$toIso8601DateTime = F2(
+	function (z, dt) {
+		return A2($waratuman$time_extra$Time$Extra$toIso8601Date, z, dt) + ('T' + A2($waratuman$time_extra$Time$Extra$toIso8601Time, z, dt));
+	});
+var $author$project$View$onCreate20MinutesBefore = function (model) {
+	var newDate = A2(
+		$elm$core$Basics$composeL,
+		A2(
+			$elm$core$Basics$composeL,
+			A2($elm$core$String$slice, 0, 16),
+			$waratuman$time_extra$Time$Extra$toIso8601DateTime(
+				A2($elm$time$Time$customZone, (-3) * 60, _List_Nil))),
+		$waratuman$time_extra$Time$Extra$addMinutes(-20))(model.time);
+	return $author$project$Msg$ExtractionListMsg(
+		$author$project$ExtractionListModel$addToModel(
+			{amount: model.view.amount, date: newDate}));
+};
 var $author$project$ExtractionSum$amount = function (x) {
 	return x.amount;
 };
@@ -10319,7 +10434,10 @@ var $author$project$View$view = function (model) {
 						A2(
 						$rundis$elm_bootstrap$Bootstrap$Grid$col,
 						_List_Nil,
-						$author$project$NewExtractionComponent$newExtractionComponent(onCreate))
+						A2(
+							$author$project$NewExtractionComponent$newExtractionComponent,
+							onCreate,
+							$author$project$View$onCreate20MinutesBefore(model)))
 					]))
 			]));
 };

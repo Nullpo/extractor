@@ -1,6 +1,11 @@
 module NewExtractionComponent exposing (newExtractionComponent, NewExtractionModel, defaultNewExtraction, updateNewExtraction)
 
+import Bootstrap.Button as Button
 import Bootstrap.Form as Form
+import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Col as Col
+import Bootstrap.Text as Text
+import BootstrapUtils exposing (bbutton)
 import Html exposing (Html, button, input, text)
 import Html.Attributes exposing (placeholder, type_)
 import Html.Events exposing (onClick, onInput)
@@ -28,14 +33,17 @@ dateComponent =
 amountComponent =
     (Input.number [ Input.onInput (ExtractionNewMsg << amountView), Input.placeholder "mililitros"])
 
-addComponent onAddExtraction =
-    (button [ onClick onAddExtraction ] [ text "Agregar" ])
+addComponent text onAddExtraction =
+    bbutton text Button.primary onAddExtraction
 
-newExtractionComponent: Msg -> List (Html Msg)
-newExtractionComponent onAddExtraction =
+newExtractionComponent: Msg -> Msg -> List (Html Msg)
+newExtractionComponent onAddExtraction onAddDelayedExtraction =
     [
         Form.group [] [dateComponent],
         Form.group [] [amountComponent],
-        Form.group [] [addComponent onAddExtraction]
+        Grid.row [] [
+            Grid.col [Col.textAlign Text.alignXsLeft ] [addComponent "Agregar" onAddExtraction],
+            Grid.col [Col.textAlign Text.alignXsRight ] [addComponent "20 mins antes" onAddDelayedExtraction]
+        ]
     ]
 

@@ -2,6 +2,7 @@ module ExtractionListComponent exposing (..)
 import Bootstrap.Button as Button exposing (button)
 import Bootstrap.Badge exposing (badgeSuccess)
 import Bootstrap.Table as Table
+import BootstrapUtils exposing (bbutton)
 import DateFormat exposing (format)
 import Extraction exposing (Extraction, ModelType)
 import Html exposing (Html, text)
@@ -9,9 +10,6 @@ import ExtractionListModel exposing (removeFromModel)
 import Iso8601 exposing (toTime)
 import Msg exposing (Msg(..))
 import Time
-
-bbutton text_ style onclick =
-    button [style, Button.onClick onclick] [ text text_ ]
 
 printExtractionList extraction =
     let
@@ -35,10 +33,13 @@ printExtractionList extraction =
 
 extractionListComponent: ModelType -> List (Html Msg)
 extractionListComponent model =
+    let
+        sortModel = (List.reverse << List.sortBy .date) model
+    in
     [
         Table.simpleTable (
             Table.simpleThead [Table.th [] [text "Fecha"], Table.th [] [text "Hora"], Table.th [] [text "ml"], Table.th [] []],
-            Table.tbody [] (List.map (Table.tr [] << printExtractionList) model)
+            Table.tbody [] (List.map (Table.tr [] << printExtractionList) sortModel)
         )
     ]
 
