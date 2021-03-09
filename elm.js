@@ -7495,6 +7495,15 @@ var $rundis$elm_bootstrap$Bootstrap$Table$td = F2(
 		return $rundis$elm_bootstrap$Bootstrap$Table$Td(
 			{children: children, options: options});
 	});
+var $elm$html$Html$Attributes$align = $elm$html$Html$Attributes$stringProperty('align');
+var $rundis$elm_bootstrap$Bootstrap$Table$CellAttr = function (a) {
+	return {$: 'CellAttr', a: a};
+};
+var $rundis$elm_bootstrap$Bootstrap$Table$cellAttr = function (attr_) {
+	return $rundis$elm_bootstrap$Bootstrap$Table$CellAttr(attr_);
+};
+var $author$project$ExtractionListComponent$toRight = $rundis$elm_bootstrap$Bootstrap$Table$cellAttr(
+	$elm$html$Html$Attributes$align('right'));
 var $elm$parser$Parser$Advanced$Bad = F2(
 	function (a, b) {
 		return {$: 'Bad', a: a, b: b};
@@ -8306,7 +8315,8 @@ var $author$project$ExtractionListComponent$printExtractionList = function (extr
 				])),
 			A2(
 			$rundis$elm_bootstrap$Bootstrap$Table$td,
-			_List_Nil,
+			_List_fromArray(
+				[$author$project$ExtractionListComponent$toRight]),
 			_List_fromArray(
 				[
 					A3(
@@ -8555,12 +8565,6 @@ var $rundis$elm_bootstrap$Bootstrap$Table$maybeWrapResponsive = F2(
 			_List_fromArray(
 				[table_])) : table_;
 	});
-var $rundis$elm_bootstrap$Bootstrap$Table$CellAttr = function (a) {
-	return {$: 'CellAttr', a: a};
-};
-var $rundis$elm_bootstrap$Bootstrap$Table$cellAttr = function (attr_) {
-	return $rundis$elm_bootstrap$Bootstrap$Table$CellAttr(attr_);
-};
 var $elm$html$Html$Attributes$scope = $elm$html$Html$Attributes$stringProperty('scope');
 var $rundis$elm_bootstrap$Bootstrap$Table$addScopeIfTh = function (cell) {
 	if (cell.$ === 'Th') {
