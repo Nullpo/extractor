@@ -1,7 +1,6 @@
-module DateTimeUtils exposing (isExtractionFromThisDay)
+module DateTimeUtils exposing (toLocalTimezone, isInRange, getDayRange, toHumanDateTime, toHtmlDateTime)
 
-import Extraction exposing (Extraction)
-import Iso8601 exposing (toTime)
+import DateFormat exposing (format)
 import Time exposing (Posix)
 import Time.Extra
 
@@ -17,6 +16,7 @@ isAfterStart posix =
             EQ -> False
             GT -> False
 
+getRangeStartingToday: Posix -> (Posix, Posix)
 getRangeStartingToday now =
     (
             (addEleven << Time.Extra.startOfDay Time.utc) now,
@@ -25,17 +25,6 @@ getRangeStartingToday now =
 
 getRangeEndingToday now =
     getRangeStartingToday (Time.Extra.addDays -1 now)
-
-getDayRange: Posix -> (Posix, Posix)
-getDayRange now =
-        case (isAfterStart now) of
-            True -> getRangeStartingToday now
-            False -> getRangeEndingToday now
-
-
-isInRange: (Posix, Posix) -> Posix -> Bool
-isInRange (start, end) extractionDate =
-        (isAfter start extractionDate) && (isBefore end extractionDate)
 
 isAfter: Posix -> Posix -> Bool
 isAfter start now =
@@ -51,11 +40,21 @@ isBefore end now =
             EQ -> True
             GT -> True
 
-isExtractionFromThisDay: Posix -> Extraction -> Bool
-isExtractionFromThisDay now extraction =
-    case toTime (extraction.date ++ ":00") of
-        Ok posixExtractionTime -> isInRange (getDayRange now) posixExtractionTime
-        Err error ->
-            let
-                dummy = (Debug.log "Error " << Debug.toString) ({error=error, value = extraction.date})
-            in False
+toLocalTimezone = Time.Extra.addHours -3
+
+
+toHumanDateTime: Posix -> String
+toHumanDateTime = format "HH:mm dd/MM/yyyy" Time.utc
+
+toHtmlDateTime: Posix -> String
+toHtmlDateTime = format "yyyy-MM-ddTHH:mm" Time.utc
+
+isInRange: (Posix, Posix) -> Posix -> Bool
+isInRange (start, end) extractionDate =
+        (isAfter start extractionDate) && (isBefore end extractionDate)
+
+getDayRange: Posix -> (Posix, Posix)
+getDayRange now =
+        case (isAfterStart now) of
+            True -> getRangeStartingToday now
+            False -> getRangeEndingToday now
