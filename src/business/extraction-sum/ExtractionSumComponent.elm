@@ -49,6 +49,15 @@ expectedComponent value =
             Input.value (String.fromInt value)
         ]
 
+toGoal expected numericExtractions =
+    let
+        total = (-) (expected * 8) (sum numericExtractions)
+    in
+        if (total < 0) then
+            ((++) "Faltan " << String.fromInt) total
+        else
+            "OK! "
+
 
 sumLastDay: Posix -> List Extraction -> Int -> List (Column Msg)
 sumLastDay now extractions expected =
@@ -60,6 +69,7 @@ sumLastDay now extractions expected =
         sumComponent numericExtractions,
         expectedComponent expected,
         col (totalExpectedComponent expected),
+        (col << text) (toGoal expected numericExtractions),
         (col << text << (++) "Faltan "<< String.fromInt) ((expected * 8) - (sum numericExtractions))
         --timeComponent now
     ]
