@@ -10438,6 +10438,14 @@ var $author$project$ExtractionSumComponent$sumComponent = A2(
 		A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text),
 		$author$project$ExtractionSumComponent$surround),
 	$author$project$ExtractionSumComponent$sumToStr);
+var $author$project$ExtractionSumComponent$toGoal = F2(
+	function (expected, numericExtractions) {
+		var total = (expected * 8) - $author$project$ExtractionSumComponent$sum(numericExtractions);
+		return (total < 0) ? A2(
+			$elm$core$Basics$composeL,
+			$elm$core$Basics$append('Faltan '),
+			$elm$core$String$fromInt)(total) : 'OK! ';
+	});
 var $author$project$ExtractionSumComponent$totalExpectedComponent = A2(
 	$elm$core$Basics$composeL,
 	A2(
@@ -10464,6 +10472,8 @@ var $author$project$ExtractionSumComponent$sumLastDay = F3(
 				$author$project$ExtractionSumComponent$expectedComponent(expected),
 				$author$project$BootstrapUtils$col(
 				$author$project$ExtractionSumComponent$totalExpectedComponent(expected)),
+				A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text)(
+				A2($author$project$ExtractionSumComponent$toGoal, expected, numericExtractions)),
 				A2(
 				$elm$core$Basics$composeL,
 				A2(
