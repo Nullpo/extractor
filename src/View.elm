@@ -2,12 +2,14 @@ module View exposing (view)
 
 import AppModel exposing (FullModel)
 import Bootstrap.Grid as Grid
-import BootstrapUtils exposing (col)
+import Bootstrap.Grid.Col as Col
+import Bootstrap.Text as Text
+import BootstrapUtils exposing (col, footer)
 import DateTimeUtils exposing (toHtmlDateTime)
 import ExtractionListComponent exposing (extractionListComponent)
 import ExtractionListModel exposing (addToModel)
 import ExtractionSumComponent exposing (sumLastDay)
-import Html exposing (Html)
+import Html exposing (Html, text)
 import Html.Attributes exposing (style)
 import Msg exposing (Msg(..))
 import NewExtractionComponent exposing (newExtractionComponent)
@@ -32,28 +34,15 @@ view model =
     onCreate = ExtractionListMsg (addToModel new)
   in
     Html.div [] [
-        Grid.container [] [
+        Grid.container [ style "margin-top" "5px", style "padding-bottom" "12em" ] [
             Grid.row [] (sumLastDay time extractions expected),
             Grid.row [] [
                 Grid.col [] (extractionListComponent extractions)
+            ],
+            Grid.row [] [
+                Grid.col [ Col.textAlign Text.alignXsCenter ] [ text "-- Fin de la lista --"]
             ]
         ],
-        footer onCreate (onCreate20MinutesBefore model)
+        footer (newExtractionComponent onCreate (onCreate20MinutesBefore model))
     ]
 
-footerStyle = [
-        style "position" "absolute",
-        style "bottom" "0",
-        style "left" "auto",
-        style "width" "100%",
-        style "max-width" "inherit",
-        style "padding-bottom" "10px"
-    ]
-
-footer: Msg -> Msg -> Html Msg
-footer a b
-    = Grid.container footerStyle [
-        Grid.row [] [
-            Grid.col [] (newExtractionComponent a b)
-        ]
-    ]
