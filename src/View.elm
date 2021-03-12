@@ -2,11 +2,13 @@ module View exposing (view)
 
 import AppModel exposing (FullModel)
 import Bootstrap.Grid as Grid
+import BootstrapUtils exposing (col)
 import DateTimeUtils exposing (toHtmlDateTime)
 import ExtractionListComponent exposing (extractionListComponent)
 import ExtractionListModel exposing (addToModel)
 import ExtractionSumComponent exposing (sumLastDay)
 import Html exposing (Html)
+import Html.Attributes exposing (style)
 import Msg exposing (Msg(..))
 import NewExtractionComponent exposing (newExtractionComponent)
 import Time.Extra exposing (toIso8601DateTime)
@@ -29,12 +31,29 @@ view model =
     expected = model.expectedAmountPerTake
     onCreate = ExtractionListMsg (addToModel new)
   in
-    Grid.container [] [
-        Grid.row [] (sumLastDay time extractions expected),
-        Grid.row [] [
-            Grid.col [] (extractionListComponent extractions)
+    Html.div [] [
+        Grid.container [] [
+            Grid.row [] (sumLastDay time extractions expected),
+            Grid.row [] [
+                Grid.col [] (extractionListComponent extractions)
+            ]
         ],
+        footer onCreate (onCreate20MinutesBefore model)
+    ]
+
+footerStyle = [
+        style "position" "absolute",
+        style "bottom" "0",
+        style "left" "auto",
+        style "width" "100%",
+        style "max-width" "inherit",
+        style "padding-bottom" "10px"
+    ]
+
+footer: Msg -> Msg -> Html Msg
+footer a b
+    = Grid.container footerStyle [
         Grid.row [] [
-            Grid.col [] (newExtractionComponent onCreate (onCreate20MinutesBefore model))
+            Grid.col [] (newExtractionComponent a b)
         ]
     ]

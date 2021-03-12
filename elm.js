@@ -9045,6 +9045,17 @@ var $author$project$ExtractionListComponent$extractionListComponent = function (
 						sortModel))))
 		]);
 };
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $author$project$View$footerStyle = _List_fromArray(
+	[
+		A2($elm$html$Html$Attributes$style, 'position', 'absolute'),
+		A2($elm$html$Html$Attributes$style, 'bottom', '0'),
+		A2($elm$html$Html$Attributes$style, 'left', 'auto'),
+		A2($elm$html$Html$Attributes$style, 'width', '100%'),
+		A2($elm$html$Html$Attributes$style, 'max-width', 'inherit'),
+		A2($elm$html$Html$Attributes$style, 'padding-bottom', '10px')
+	]);
 var $author$project$NewExtractionComponent$addComponent = F2(
 	function (text, onAddExtraction) {
 		return A3($author$project$BootstrapUtils$bbutton, text, $rundis$elm_bootstrap$Bootstrap$Button$primary, onAddExtraction);
@@ -10176,6 +10187,25 @@ var $author$project$NewExtractionComponent$newExtractionComponent = F2(
 					]))
 			]);
 	});
+var $author$project$View$footer = F2(
+	function (a, b) {
+		return A2(
+			$rundis$elm_bootstrap$Bootstrap$Grid$container,
+			$author$project$View$footerStyle,
+			_List_fromArray(
+				[
+					A2(
+					$rundis$elm_bootstrap$Bootstrap$Grid$row,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$rundis$elm_bootstrap$Bootstrap$Grid$col,
+							_List_Nil,
+							A2($author$project$NewExtractionComponent$newExtractionComponent, a, b))
+						]))
+				]));
+	});
 var $waratuman$time_extra$Time$Extra$addMinutes = function (m) {
 	return A2(
 		$elm$core$Basics$composeR,
@@ -10454,37 +10484,34 @@ var $author$project$View$view = function (model) {
 	var extractions = model.extractions;
 	var expected = model.expectedAmountPerTake;
 	return A2(
-		$rundis$elm_bootstrap$Bootstrap$Grid$container,
+		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
 				A2(
-				$rundis$elm_bootstrap$Bootstrap$Grid$row,
-				_List_Nil,
-				A3($author$project$ExtractionSumComponent$sumLastDay, time, extractions, expected)),
-				A2(
-				$rundis$elm_bootstrap$Bootstrap$Grid$row,
+				$rundis$elm_bootstrap$Bootstrap$Grid$container,
 				_List_Nil,
 				_List_fromArray(
 					[
 						A2(
-						$rundis$elm_bootstrap$Bootstrap$Grid$col,
+						$rundis$elm_bootstrap$Bootstrap$Grid$row,
 						_List_Nil,
-						$author$project$ExtractionListComponent$extractionListComponent(extractions))
+						A3($author$project$ExtractionSumComponent$sumLastDay, time, extractions, expected)),
+						A2(
+						$rundis$elm_bootstrap$Bootstrap$Grid$row,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$rundis$elm_bootstrap$Bootstrap$Grid$col,
+								_List_Nil,
+								$author$project$ExtractionListComponent$extractionListComponent(extractions))
+							]))
 					])),
 				A2(
-				$rundis$elm_bootstrap$Bootstrap$Grid$row,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$rundis$elm_bootstrap$Bootstrap$Grid$col,
-						_List_Nil,
-						A2(
-							$author$project$NewExtractionComponent$newExtractionComponent,
-							onCreate,
-							$author$project$View$onCreate20MinutesBefore(model)))
-					]))
+				$author$project$View$footer,
+				onCreate,
+				$author$project$View$onCreate20MinutesBefore(model))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
