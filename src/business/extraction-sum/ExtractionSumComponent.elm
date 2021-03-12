@@ -15,8 +15,17 @@ import Time.Extra exposing (epoch)
 
 amount x = x.amount
 
-sumComponent numericExtractions =
-    (col << Html.text) ("∑ " ++ ((String.fromInt (List.foldl (+) 0 numericExtractions)) ++ " ml"))
+sum =
+    List.foldl (+) 0
+
+sumToStr =
+    (String.fromInt << sum)
+
+surround a =
+    "∑ " ++ a ++ " ml"
+
+sumComponent =
+    (col << Html.text << surround << sumToStr)
 
 timeComponent now =
         Grid.col  [Col.textAlign Text.alignXsRight] [
@@ -51,7 +60,8 @@ sumLastDay now extractions expected =
         sumComponent numericExtractions,
         expectedComponent expected,
         col (totalExpectedComponent expected),
-        timeComponent now
+        (col << text << (++) "Faltan "<< String.fromInt) ((expected * 8) - (sum numericExtractions))
+        --timeComponent now
     ]
 
 changeAmountPerTake: ExtractionSumType -> Int

@@ -10426,28 +10426,18 @@ var $author$project$ExtractionUtils$isExtractionFromThisDay = F2(
 			return false;
 		}
 	});
-var $author$project$ExtractionSumComponent$sumComponent = function (numericExtractions) {
-	return A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text)(
-		'∑ ' + ($elm$core$String$fromInt(
-			A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numericExtractions)) + ' ml'));
+var $author$project$ExtractionSumComponent$sum = A2($elm$core$List$foldl, $elm$core$Basics$add, 0);
+var $author$project$ExtractionSumComponent$sumToStr = A2($elm$core$Basics$composeL, $elm$core$String$fromInt, $author$project$ExtractionSumComponent$sum);
+var $author$project$ExtractionSumComponent$surround = function (a) {
+	return '∑ ' + (a + ' ml');
 };
-var $waratuman$time_extra$Time$Extra$epoch = $elm$time$Time$millisToPosix(0);
-var $author$project$DateTimeUtils$toHumanDateTime = A2($danhandrea$elm_date_format$DateFormat$format, 'HH:mm dd/MM/yyyy', $elm$time$Time$utc);
-var $author$project$ExtractionSumComponent$timeComponent = function (now) {
-	return A2(
-		$rundis$elm_bootstrap$Bootstrap$Grid$col,
-		_List_fromArray(
-			[
-				$rundis$elm_bootstrap$Bootstrap$Grid$Col$textAlign($rundis$elm_bootstrap$Bootstrap$Text$alignXsRight)
-			]),
-		_List_fromArray(
-			[
-				_Utils_eq(
-				A2($waratuman$time_extra$Time$Extra$compare, now, $waratuman$time_extra$Time$Extra$epoch),
-				$elm$core$Basics$EQ) ? $elm$html$Html$text('') : $elm$html$Html$text(
-				$author$project$DateTimeUtils$toHumanDateTime(now))
-			]));
-};
+var $author$project$ExtractionSumComponent$sumComponent = A2(
+	$elm$core$Basics$composeL,
+	A2(
+		$elm$core$Basics$composeL,
+		A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text),
+		$author$project$ExtractionSumComponent$surround),
+	$author$project$ExtractionSumComponent$sumToStr);
 var $author$project$ExtractionSumComponent$totalExpectedComponent = A2(
 	$elm$core$Basics$composeL,
 	A2(
@@ -10474,7 +10464,14 @@ var $author$project$ExtractionSumComponent$sumLastDay = F3(
 				$author$project$ExtractionSumComponent$expectedComponent(expected),
 				$author$project$BootstrapUtils$col(
 				$author$project$ExtractionSumComponent$totalExpectedComponent(expected)),
-				$author$project$ExtractionSumComponent$timeComponent(now)
+				A2(
+				$elm$core$Basics$composeL,
+				A2(
+					$elm$core$Basics$composeL,
+					A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text),
+					$elm$core$Basics$append('Faltan ')),
+				$elm$core$String$fromInt)(
+				(expected * 8) - $author$project$ExtractionSumComponent$sum(numericExtractions))
 			]);
 	});
 var $author$project$View$view = function (model) {
