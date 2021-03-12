@@ -10473,15 +10473,7 @@ var $author$project$ExtractionSumComponent$sumLastDay = F3(
 				$author$project$BootstrapUtils$col(
 				$author$project$ExtractionSumComponent$totalExpectedComponent(expected)),
 				A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text)(
-				A2($author$project$ExtractionSumComponent$toGoal, expected, numericExtractions)),
-				A2(
-				$elm$core$Basics$composeL,
-				A2(
-					$elm$core$Basics$composeL,
-					A2($elm$core$Basics$composeL, $author$project$BootstrapUtils$col, $elm$html$Html$text),
-					$elm$core$Basics$append('Faltan ')),
-				$elm$core$String$fromInt)(
-				(expected * 8) - $author$project$ExtractionSumComponent$sum(numericExtractions))
+				A2($author$project$ExtractionSumComponent$toGoal, expected, numericExtractions))
 			]);
 	});
 var $author$project$View$view = function (model) {

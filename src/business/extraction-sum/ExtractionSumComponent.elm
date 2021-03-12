@@ -69,7 +69,7 @@ sumLastDay now extractions expected =
         sumComponent numericExtractions,
         expectedComponent expected,
         col (totalExpectedComponent expected),
-        (col << text) (toGoal expected numericExtractions),
+        (col << text) (toGoal expected numericExtractions)
         --timeComponent now
     ]
 
