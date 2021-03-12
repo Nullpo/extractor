@@ -70,7 +70,6 @@ sumLastDay now extractions expected =
         expectedComponent expected,
         col (totalExpectedComponent expected),
         (col << text) (toGoal expected numericExtractions),
-        (col << text << (++) "Faltan "<< String.fromInt) ((expected * 8) - (sum numericExtractions))
         --timeComponent now
     ]
 
