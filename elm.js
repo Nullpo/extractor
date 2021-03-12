@@ -10441,7 +10441,7 @@ var $author$project$ExtractionSumComponent$sumComponent = A2(
 var $author$project$ExtractionSumComponent$toGoal = F2(
 	function (expected, numericExtractions) {
 		var total = (expected * 8) - $author$project$ExtractionSumComponent$sum(numericExtractions);
-		return (total < 0) ? A2(
+		return (total > 0) ? A2(
 			$elm$core$Basics$composeL,
 			$elm$core$Basics$append('Faltan '),
 			$elm$core$String$fromInt)(total) : 'OK! ';

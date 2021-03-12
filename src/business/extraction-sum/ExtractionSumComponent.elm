@@ -53,7 +53,7 @@ toGoal expected numericExtractions =
     let
         total = (-) (expected * 8) (sum numericExtractions)
     in
-        if (total < 0) then
+        if (total > 0) then
             ((++) "Faltan " << String.fromInt) total
         else
             "OK! "
