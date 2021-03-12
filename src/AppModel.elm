@@ -6,7 +6,7 @@ import Time exposing (Posix)
 
 type alias FullModel = {
         extractions: List Extraction,
-        expectedAmountPerDay: Int,
+        expectedAmountPerTake: Int,
         error: Maybe String,
         view: NewExtractionModel,
         time: Posix

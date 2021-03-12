@@ -19,7 +19,7 @@ stateEncoder : FullModel -> List (String, Value)
 stateEncoder model =
             [
                 ( "extractions", extractionsEncoder model.extractions ),
-                ( "expectedAmountPerDay", Encode.int model.expectedAmountPerDay )
+                ( "expectedAmountPerDay", Encode.int model.expectedAmountPerTake )
             ]
 
 

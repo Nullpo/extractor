@@ -5,7 +5,7 @@ import Bootstrap.Grid as Grid
 import DateTimeUtils exposing (toHtmlDateTime)
 import ExtractionListComponent exposing (extractionListComponent)
 import ExtractionListModel exposing (addToModel)
-import ExtractionSum exposing (sumLastDay)
+import ExtractionSumComponent exposing (sumLastDay)
 import Html exposing (Html)
 import Msg exposing (Msg(..))
 import NewExtractionComponent exposing (newExtractionComponent)
@@ -26,7 +26,7 @@ view model =
     extractions = model.extractions
     new = model.view
     time = model.time
-    expected = model.expectedAmountPerDay
+    expected = model.expectedAmountPerTake
     onCreate = ExtractionListMsg (addToModel new)
   in
     Grid.container [] [

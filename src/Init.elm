@@ -21,7 +21,7 @@ init flags =
         ({
             extractions = state.extractions,
             view = defaultNewExtraction,
-            expectedAmountPerDay = state.expectedAmountPerDay,
+            expectedAmountPerTake = state.expectedAmountPerDay,
             error = state.error,
             time = (Time.millisToPosix 0)
             }, Cmd.none)
